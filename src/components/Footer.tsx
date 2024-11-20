@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin, Zap } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin, Activity } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <Zap className="h-8 w-8 text-blue-500" />
+              <Activity className="h-8 w-8 text-blue-500" />
               <span className="ml-2 text-2xl font-bold text-white">FinTech Pulse</span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
