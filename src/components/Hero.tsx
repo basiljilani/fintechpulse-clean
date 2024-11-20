@@ -1,7 +1,10 @@
 import React from 'react';
 import { Bot, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <div className="relative bg-gradient-to-r from-blue-600 to-blue-800 pt-32 pb-40 overflow-hidden">
       <div className="absolute inset-0">
@@ -18,11 +21,17 @@ export default function Hero() {
             Save time, ensure accuracy, and scale your content production.
           </p>
           <div className="flex justify-center space-x-6">
-            <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-medium hover:bg-blue-50 transition-colors inline-flex items-center text-lg">
+            <button 
+              onClick={() => navigate('/signup')}
+              className="bg-white text-blue-600 px-8 py-4 rounded-lg font-medium hover:bg-blue-50 transition-colors inline-flex items-center text-lg"
+            >
               <Bot className="h-6 w-6 mr-2" />
-              Try Demo
+              Get Started
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors inline-flex items-center text-lg">
+            <button 
+              onClick={() => navigate('/solutions')}
+              className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors inline-flex items-center text-lg"
+            >
               <Sparkles className="h-6 w-6 mr-2" />
               Learn More
             </button>
