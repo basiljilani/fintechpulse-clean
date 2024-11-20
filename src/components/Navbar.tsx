@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, X, Activity } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../lib/auth.store';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated, signOut } = useAuthStore();
 
   const menuItems = [
     { title: 'Home', href: '/' },
@@ -11,6 +15,15 @@ export default function Navbar() {
     { title: 'Pricing', href: '/pricing' },
     { title: 'Contact', href: '/contact' },
   ];
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <nav className="bg-white shadow-lg fixed w-full z-50">
@@ -32,9 +45,29 @@ export default function Navbar() {
                 {item.title}
               </a>
             ))}
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
-              Get Started
-            </button>
+            {isAuthenticated ? (
+              <>
+                <a
+                  href="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Dashboard
+                </a>
+                <button
+                  onClick={handleSignOut}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                Sign In
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -62,9 +95,29 @@ export default function Navbar() {
                 {item.title}
               </a>
             ))}
-            <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
-              Get Started
-            </button>
+            {isAuthenticated ? (
+              <>
+                <a
+                  href="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Dashboard
+                </a>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       )}
