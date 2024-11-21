@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../lib/auth.store'; // Fixed import path
+import { useAuthStore } from '@/lib/auth.store';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
