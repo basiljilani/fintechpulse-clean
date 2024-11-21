@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Menu, X, Activity } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/lib/auth.store';
+import { Menu, X, Activity, UserCircle, Settings, LogOut } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuthStore } from '../lib/auth.store';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated, signOut } = useAuthStore();
+  const { isAuthenticated, user, signOut } = useAuthStore();
 
   const menuItems = [
-    { title: 'Home', href: '/' },
     { title: 'Solutions', href: '/solutions' },
     { title: 'Categories', href: '/categories' },
     { title: 'Pricing', href: '/pricing' },
@@ -20,6 +20,7 @@ export default function Navbar() {
     try {
       await signOut();
       navigate('/');
+      setShowProfileMenu(false);
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -29,41 +30,64 @@ export default function Navbar() {
     <nav className="bg-white shadow-lg fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center hover:opacity-75 transition-opacity">
             <Activity className="h-8 w-8 text-blue-600 animate-pulse" />
             <span className="ml-2 text-xl font-bold text-gray-900">FinTech Pulse</span>
-          </div>
+          </Link>
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {menuItems.map((item) => (
-              <a
+              <Link
                 key={item.title}
-                href={item.href}
+                to={item.href}
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 {item.title}
-              </a>
+              </Link>
             ))}
             {isAuthenticated ? (
-              <>
-                <a
-                  href="/dashboard"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Dashboard
-                </a>
+              <div className="relative ml-4">
                 <button
-                  onClick={handleSignOut}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 bg-gray-100 px-4 py-2 rounded-lg"
                 >
-                  Sign Out
+                  <UserCircle className="h-5 w-5" />
+                  <span className="text-sm font-medium">{user?.username}</span>
                 </button>
-              </>
+                
+                {showProfileMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
+                    <Link
+                      to="/profile"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      <UserCircle className="h-4 w-4 mr-2" />
+                      Profile
+                    </Link>
+                    <Link
+                      to="/settings"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      <Settings className="h-4 w-4 mr-2" />
+                      Settings
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <button
                 onClick={() => navigate('/login')}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
               >
                 Sign In
               </button>
@@ -87,22 +111,31 @@ export default function Navbar() {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {menuItems.map((item) => (
-              <a
+              <Link
                 key={item.title}
-                href={item.href}
+                to={item.href}
                 className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                onClick={() => setIsOpen(false)}
               >
                 {item.title}
-              </a>
+              </Link>
             ))}
             {isAuthenticated ? (
               <>
-                <a
-                  href="/dashboard"
+                <Link
+                  to="/profile"
                   className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsOpen(false)}
                 >
-                  Dashboard
-                </a>
+                  Profile
+                </Link>
+                <Link
+                  to="/settings"
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Settings
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
@@ -112,8 +145,11 @@ export default function Navbar() {
               </>
             ) : (
               <button
-                onClick={() => navigate('/login')}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+                onClick={() => {
+                  navigate('/login');
+                  setIsOpen(false);
+                }}
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors mt-2"
               >
                 Sign In
               </button>
