@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 
-
 interface AuthState {
   isAuthenticated: boolean;
   user: any | null;
@@ -11,16 +10,37 @@ interface AuthState {
   checkAuth: () => Promise<void>;
 }
 
+// Placeholder functions for authentication logic
+const placeholderSignIn = async ({ username, password }: { username: string; password: string }) => {
+  console.log('signIn placeholder called', { username, password });
+  return { isSignedIn: true }; // Simulate a successful sign-in
+};
+
+const placeholderSignUp = async ({ username, password, options }: { username: string; password: string; options?: any }) => {
+  console.log('signUp placeholder called', { username, password, options });
+  return { isSignUpComplete: true }; // Simulate a successful sign-up
+};
+
+const placeholderSignOut = async () => {
+  console.log('signOut placeholder called');
+};
+
+const placeholderGetCurrentUser = async () => {
+  console.log('getCurrentUser placeholder called');
+  return { username: 'testUser' }; // Simulate a logged-in user
+};
+
+// Zustand store
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   user: null,
   loading: true,
-  
+
   signIn: async (username: string, password: string) => {
     try {
-      const output = await signIn({ username, password });
+      const output = await placeholderSignIn({ username, password });
       if (output.isSignedIn) {
-        const user = await getCurrentUser();
+        const user = await placeholderGetCurrentUser();
         set({ isAuthenticated: true, user });
       }
       return output;
@@ -32,7 +52,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signUp: async (username: string, password: string, email: string) => {
     try {
-      const { isSignUpComplete } = await signUp({
+      const { isSignUpComplete } = await placeholderSignUp({
         username,
         password,
         options: {
@@ -53,7 +73,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signOut: async () => {
     try {
-      await signOut();
+      await placeholderSignOut();
       set({ isAuthenticated: false, user: null });
     } catch (error) {
       console.error('Error signing out:', error);
@@ -63,7 +83,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   checkAuth: async () => {
     try {
-      const user = await getCurrentUser();
+      const user = await placeholderGetCurrentUser();
       set({ isAuthenticated: true, user, loading: false });
     } catch (error) {
       set({ isAuthenticated: false, user: null, loading: false });
