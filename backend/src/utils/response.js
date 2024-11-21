@@ -1,21 +1,22 @@
-const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
-  };
-  
-  exports.success = (data, statusCode = 200) => ({
-    statusCode,
-    headers,
-    body: JSON.stringify(data)
-  });
-  
-  exports.error = (error, statusCode = 500) => ({
-    statusCode,
-    headers,
-    body: JSON.stringify({
-      message: "Internal server error",
-      error: error.message
-    })
-  });
-  
+export const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+  'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+  'Content-Type': 'application/json'
+};
+
+export const success = (data, statusCode = 200) => ({
+  statusCode,
+  headers,
+  body: JSON.stringify(data)
+});
+
+export const error = (message, statusCode = 500, reference = '') => ({
+  statusCode,
+  headers,
+  body: JSON.stringify({
+    error: message,
+    reference,
+    timestamp: new Date().toISOString()
+  })
+});
