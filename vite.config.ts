@@ -4,9 +4,6 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  define: {
-    global: 'globalThis',
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
@@ -16,9 +13,10 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
+      external: [],
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'zustand']
+          vendor: ['react', 'react-dom', 'react-router-dom', 'zustand', '@aws-amplify/auth']
         }
       }
     }

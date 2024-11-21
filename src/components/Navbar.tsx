@@ -19,8 +19,8 @@ export default function Navbar() {
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate('/');
       setShowProfileMenu(false);
+      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -58,6 +58,14 @@ export default function Navbar() {
                 
                 {showProfileMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      <Activity className="h-4 w-4 mr-2" />
+                      Dashboard
+                    </Link>
                     <Link
                       to="/profile"
                       className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -122,6 +130,13 @@ export default function Navbar() {
             ))}
             {isAuthenticated ? (
               <>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
                 <Link
                   to="/profile"
                   className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
