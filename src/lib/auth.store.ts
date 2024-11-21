@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { signIn, signUp, signOut, getCurrentUser } from '@aws-amplify/auth';
+
 
 interface AuthState {
   isAuthenticated: boolean;
