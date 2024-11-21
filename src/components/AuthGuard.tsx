@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../lib/auth.store'; // Fixed import path
+import { useAuthStore } from '../lib/auth.store';
 
 interface AuthGuardProps {
   children: React.ReactNode;
