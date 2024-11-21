@@ -3,9 +3,9 @@ import { Amplify } from 'aws-amplify';
 const awsConfig = {
   Auth: {
     Cognito: {
-      userPoolId: import.meta.env.VITE_USER_ID,
-      userPoolClientId: import.meta.env.VITE_CLIENT_ID,
-      region: import.meta.env.VITE_REGION
+      userPoolId: 'eu-north-1_vPQXdsFwP',
+      userPoolClientId: '6ehfpihp1om85qkpa4vmtlh533',
+      region: 'eu-north-1'
     }
   }
 };
