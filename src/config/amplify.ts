@@ -1,13 +1,11 @@
 import { Amplify } from 'aws-amplify';
 
-const awsConfig = {
+Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: import.meta.env.VITE_AWS_USER_POOL_ID,
-      userPoolClientId: import.meta.env.VITE_AWS_USER_POOL_CLIENT_ID,
-      region: import.meta.env.VITE_AWS_REGION
+      region: import.meta.env.Region,
+      userPoolId: import.meta.env.User-ID,
+      userPoolClientId: import.meta.env.Client-ID
     }
   }
-};
-
-Amplify.configure(awsConfig);
+});
