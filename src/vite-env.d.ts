@@ -1,10 +1,10 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly API_GATEWAY: string;
+  readonly USER_ID: string;
   readonly CLIENT_ID: string;
   readonly REGION: string;
-  readonly USER_ID: string;
+  readonly API_GATEWAY: string;
 }
 
 interface ImportMeta {
