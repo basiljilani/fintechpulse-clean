@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { saveUserData } from '../lib/apiservice';
+import { saveUserData } from '@/lib/apiservices';
+
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>('');
