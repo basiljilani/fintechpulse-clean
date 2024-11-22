@@ -13,16 +13,17 @@
     "jsx": "react-jsx",
     "strict": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
+    "baseUrl": "./", // Explicit root
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"], // Match with `vite.config.ts`
+      "@/lib/*": ["src/lib/*"] // Optional: Add explicit alias for 'lib'
     },
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"] // Include custom types
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src"],
+  "include": ["src"], // Ensure src folder is included
   "references": [{ "path": "./tsconfig.node.json" }]
 }

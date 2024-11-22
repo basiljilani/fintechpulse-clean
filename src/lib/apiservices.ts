@@ -1,29 +1,26 @@
-// src/lib/apiservices.ts
-
 const API_URL = import.meta.env.VITE_API_ENDPOINT;
 
-async function getAuthHeader(token?: string): Promise<Record<string, string>> {
+async function getAuthHeader(token: string): Promise<Record<string, string>> {
   try {
     if (!token) {
-      throw new Error("Authorization token is missing.");
+      throw new Error('Authorization token is missing.');
     }
     return {
-      Authorization: `Bearer ${token}`, // Pass the token dynamically
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     };
   } catch (error) {
     console.error('Error getting auth header:', error);
-    // Return only the Content-Type header if token is missing
     return { 'Content-Type': 'application/json' };
   }
 }
 
 export const api = {
-  async get(endpoint: string, token?: string) {
+  async get(endpoint: string, token: string) {
     try {
       const headers = await getAuthHeader(token);
       const response = await fetch(`${API_URL}${endpoint}`, {
-        headers, // Ensure headers include dynamic token if provided
+        headers,
       });
       if (!response.ok) {
         throw new Error(`GET request failed with status ${response.status}`);
@@ -35,16 +32,19 @@ export const api = {
     }
   },
 
-  async post(endpoint: string, data: any, token?: string) {
+  async post(endpoint: string, data: any, token: string) {
     try {
       const headers = await getAuthHeader(token);
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
-        headers, // Ensure headers include dynamic token if provided
+        headers,
         body: JSON.stringify(data),
       });
       if (!response.ok) {
-        throw new Error(`POST request failed with status ${response.status}`);
+        const errorBody = await response.json();
+        throw new Error(
+          errorBody?.message || `POST request failed with status ${response.status}`
+        );
       }
       return response.json();
     } catch (error) {
@@ -53,3 +53,8 @@ export const api = {
     }
   },
 };
+
+// This specific function is exported for saving user data
+export async function saveUserData(data: { email: string }, token: string) {
+  return api.post('/userdata', data, token);
+}

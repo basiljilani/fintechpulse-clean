@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { saveUserData } from '@/lib/apiService'; // Adjusted the import path for consistency
+import { saveUserData } from '../lib/apiservice';
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -17,12 +17,14 @@ const SignUp: React.FC = () => {
         return;
       }
 
-      const response = await saveUserData(email, token);
+      const response = await saveUserData({ email }, token);
       setMessage('User data saved successfully!');
       console.log('User data saved successfully:', response);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving user data:', error);
-      setMessage('Failed to save user data. Please try again.');
+      setMessage(
+        error?.message || 'Failed to save user data. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
