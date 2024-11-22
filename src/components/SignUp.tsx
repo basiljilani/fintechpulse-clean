@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { saveUserData } from '@/lib/apiservices';
-
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>('');
-  const [token, setToken] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
 
@@ -12,20 +9,40 @@ const SignUp: React.FC = () => {
     setLoading(true);
     setMessage('');
     try {
-      if (!email || !token) {
-        setMessage('Email and token are required.');
+      if (!email) {
+        setMessage('Email is required.');
         setLoading(false);
         return;
       }
 
-      const response = await saveUserData({ email }, token);
+      // Fetch the Cognito token (adjust this if you're using a different auth mechanism)
+      const token = localStorage.getItem('cognitoToken'); // Replace with your token retrieval method
+      if (!token) {
+        setMessage('Missing authentication token.');
+        setLoading(false);
+        return;
+      }
+
+      // Make API call to save user data
+      const response = await fetch(import.meta.env.VITE_API_ENDPOINT + '/userdata', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Include token for authorization
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const result = await response.json();
       setMessage('User data saved successfully!');
-      console.log('User data saved successfully:', response);
+      console.log('User data saved successfully:', result);
     } catch (error: any) {
       console.error('Error saving user data:', error);
-      setMessage(
-        error?.message || 'Failed to save user data. Please try again.'
-      );
+      setMessage(error.message || 'Failed to save user data. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -40,14 +57,6 @@ const SignUp: React.FC = () => {
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Enter your token"
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
         />
       </div>
       <div>
