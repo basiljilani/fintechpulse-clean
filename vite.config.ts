@@ -16,7 +16,7 @@ export default defineConfig({
       external: [],
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'zustand', '@aws-amplify/auth']
+          vendor: ['react', 'react-dom', 'react-router-dom', 'zustand'] // Removed '@aws-amplify/auth'
         }
       }
     }
